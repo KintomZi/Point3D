@@ -1,7 +1,6 @@
 import os
 from collections import defaultdict
 import numpy as np
-from plyfile import PlyData, PlyElement
 
 # 纯净版
 def xyz_2Dsplit(horizontalAxis: np.ndarray, verticalAxis: np.ndarray, rowH: float, colW: float,
