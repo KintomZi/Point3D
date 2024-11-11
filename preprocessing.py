@@ -1,6 +1,41 @@
 import os
 from collections import defaultdict
 import numpy as np
+import open3d as o3d
+
+def xyz_density(pt_xyz):
+    """
+       计算每个点到其最近邻的距离，用于估计三维点云的密度。
+
+       Args:
+           pt_xyz (numpy.ndarray): 形状为 (N, 3) 的数组，表示 N 个点的三维坐标。
+
+       Returns:
+           numpy.ndarray: 形状为 (N,) 的数组，每个元素表示对应点到最近邻点的距离，用于估计该点的密度。
+
+       Description:
+           该函数首先将输入的三维坐标数据转换为 Open3D 的点云对象，然后构建一个 KDTree，以便进行快速的最近邻查询。对每个点，查询其最近邻的距离，并返回所有点的最近邻距离列表，以此估计点云的密度分布。
+
+       Note:
+           该方法适合于大规模点云数据的局部密度分析，有助于评估点云的密集程度。
+       """
+    # 将数据转换为 Open3D 点云对象
+    pcd = o3d.geometry.PointCloud()
+    pcd.points = o3d.utility.Vector3dVector(pt_xyz)
+
+    # 创建KDTree
+    pcd_tree = o3d.geometry.KDTreeFlann(pcd)
+
+    All_distance = np.zeros(len(pt_xyz))
+    # 查询每个点的最近邻
+    for i in range(len(pt_xyz)):
+        # [k值，索引，距离]
+        [_, _, distance] = pcd_tree.search_knn_vector_3d(pt_xyz[i], 2)  # 2是k，返回最近的两个点(0是自身，1是最邻近点）
+        All_distance[i] = distance[1]  # distance[1] 为与当前点最近邻点的距离
+
+    return All_distance
+
+
 
 # 纯净版
 def xyz_2Dsplit(horizontalAxis: np.ndarray, verticalAxis: np.ndarray, rowH: float, colW: float,
@@ -77,6 +112,8 @@ def xyz_2Dsplit(horizontalAxis: np.ndarray, verticalAxis: np.ndarray, rowH: floa
                     split_idx[(ni, nj)].extend(split_idx.pop((rows, cols)))
     # 返回分割结果
     return split_idx
+
+
 
 # 控制台输出分割点的数量分布
 def xyz_2Dsplit_show(horizontalAxis: np.ndarray, verticalAxis: np.ndarray, rowH: float, colW: float, overlapH: float = 0, overlapW: float = 0, areaBrokenMerge: bool = True, ptBrokenMerge: int = None):
