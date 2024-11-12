@@ -3,7 +3,7 @@ from collections import defaultdict
 import numpy as np
 import open3d as o3d
 
-def xyz_density(pt_xyz):
+def xyz_density(pt_xyz: np.ndarray) -> np.ndarray:
     """
        计算每个点到其最近邻的距离，用于估计三维点云的密度。
 
