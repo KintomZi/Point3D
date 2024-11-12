@@ -39,7 +39,8 @@ def xyz_density(pt_xyz: np.ndarray) -> np.ndarray:
 
 # 纯净版
 def xyz_2Dsplit(horizontalAxis: np.ndarray, verticalAxis: np.ndarray, rowH: float, colW: float,
-                overlapH: float = 0, overlapW: float = 0, areaBrokenMerge: bool = True, ptBrokenMerge: int = None):
+                overlapH: float = 0, overlapW: float = 0, areaBrokenMerge: bool = True,
+                ptBrokenMerge: int = None) -> defaultdict:
     """
     将二维坐标 (horizontalAxis, verticalAxis) 按照指定的行列大小 (rowH, colW) 进行分割，并允许设置重叠度 (overlapH, overlapW)，以及是否合并分割后不足尺寸的区域。
 
@@ -116,7 +117,7 @@ def xyz_2Dsplit(horizontalAxis: np.ndarray, verticalAxis: np.ndarray, rowH: floa
 
 
 # 控制台输出分割点的数量分布
-def xyz_2Dsplit_show(horizontalAxis: np.ndarray, verticalAxis: np.ndarray, rowH: float, colW: float, overlapH: float = 0, overlapW: float = 0, areaBrokenMerge: bool = True, ptBrokenMerge: int = None):
+def xyz_2Dsplit_show(horizontalAxis: np.ndarray, verticalAxis: np.ndarray, rowH: float, colW: float, overlapH: float = 0, overlapW: float = 0, areaBrokenMerge: bool = True, ptBrokenMerge: int = None) -> defaultdict:
     print('')
     split_idx = defaultdict(list)  
 
